@@ -22,46 +22,125 @@
 </header>
 
 
-<main> To be better adjusted !!! 
-  
-     <p>   My flix / Top movies </p>    
-       
-            title: 'Pulp Ficiton',
-            director: 'Quentin Tarantino' 
-            94 : Gangster 
-         <br>
-            title: 'Kill Bill',
-            director: 'Quentin Tarantino' 
-            03
-            Action drama thriller
-         <br>
-            title: '300',
-            director: 'Zack snyder' 
-            06  
-            Epic historical action comic 
-          <br>
-            title: 'The Godfather',
-            director: 'Francis Ford Coppola' 
-            72 
-            Gangster 
-          <br>
-            title: 'Sin city',
-            director: 'Franck Miller'  
-            05
-            action thriller comic
-          <br>
-            title: 'Scarface',
-            director: 'Brian De Palma' 
-            93 
-            Gangster
-           
-          <br>
-            title: 'Titanic',
-            director: 'James cameron'  
-            97 
-            Drama Romance
-          <br>
-  </main>
+<main> 
+  <table>
+      <tr>
+        <th>Request</th>
+        <th>URL</th>
+        <th>Request Parameter</th>
+        <th>HTTP Method</th>
+        <th>Response body data format</th>
+        <th>Request body data format</th>
+      </tr>
+
+      <tr>
+        <td>Returns full list of movies available on myFlix</td>
+        <td>"/movies"</td>
+        <td>none</td>
+        <td>GET <br> Example: app.get("/movies", (req,res) =>{})</td>
+        <td>
+          A JSON object holding data about all the movies <br />
+          Example: {Title: "", Description: ""}
+          Director: { Name: "", Bio: "" }, Genre: { Name: "", Description:""} }
+        </td>
+      </tr>
+
+      <tr>
+        <td>Returns data about a single movie search by title to user</td>
+        <td>"/movies/:title"</td>
+        <td>:title</td>
+        <td>GET <br> Example: app.get("/movies/:title", (req,res) =>{})</td>
+        <td>
+          A JSON object holding data about a single movie <br />
+          Example: {Title: "", Description: ""}
+        </td>
+      </tr>
+
+      <tr>
+        <td>Returns data about a genre of movie called by name</td>
+        <td>"'/movies/genre/: genreName"</td>
+        <td>:genreName</td>
+        <td>GET<br> Example: app.get("'/movies/genre/: genreName", (req,res) =>{})</td>
+        <td>
+          A JSON object holding data about a genre <br />
+          Example: Genre: { Name: ""}
+        </td>
+      </tr>
+      
+      <tr>
+        <td>Returns data about a director by name</td>
+        <td>"/movies/directors/:name"</td>
+        <td>:name</td>
+        <td>GET <br> Example: app.get("/movies/directors/:name", (req,res) =>{})</td>
+        <td>
+          A JSON object holding data about a director <br />
+          Example: Director: { Name: "", Bio: "" },
+        </td>
+      </tr>
+      
+      <tr>
+        <td>Creates new users Account</td>
+        <td>"/users"</td>
+        <td>none</td>
+        <td>POST <br>Example: app.post("/users", (req,res) =>{})</td>
+        <td>
+          A JSON object holding data about new user that was added <br />
+          Example: {
+            id: Integer,
+            name: String,
+            password: String,
+            email: String,
+            birthday: Date
+          },
+        </td>
+
+        <td>
+          A JSON object is requested  <br />
+          Example: {
+            id: number
+            name: String,
+            Password: String,
+            Email: String,
+            Birthday: Date
+            favoriteMovie : [{}]
+          },
+        </td>
+      </tr>
+    
+
+      <tr>
+        <td>Allows users to update their user info</td>
+        <td>"/users/:id"</td>
+        <td>:id</td>
+        <td>PUT <br> Example: app.put("/users/:id", (req,res) =>{})</td>
+      </tr>
+
+      <tr>
+        <td>Allows users to add a movie to their list of favorites</td>
+        <td>"/users/:id/:movieTitle"</td>
+        <td>:id,:movieTitle</td>
+        <td>POST <br> Example: app.post("/users/:id/:movieTitle", (req,res) =>{})</td>
+      </tr>
+
+      <tr>
+        <td>Allows users to remove a movie from their list of favorites</td>
+        <td>"/users/:id/:movieTitle"</td>
+        <td>:id,:movieTitle</td>
+        <td>DELETE <br> Example: app.delete("/users/:id/:movieTitle", (req,res) =>{})</td>
+      </tr>
+
+      <tr>
+        <td>Allows users to delete Account</td>
+        <td>"/users/:id"</td>
+        <td>:id</td>
+        <td>DELETE <br> Example: app.delete("/users/:id", (req,res) =>{})</td>
+        <td>A text message indicating that the user has been deleted</td>
+      </tr>
+      
+    </table>
+
+
+</main>
 
 </body>
 
