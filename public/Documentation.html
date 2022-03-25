@@ -21,7 +21,6 @@
     </h2> 
 </header>
 
-
 <main> 
   <table>
       <tr>
@@ -34,113 +33,138 @@
       </tr>
 
       <tr>
-        <td>Returns full list of movies available on myFlix</td>
+        <td>List of movies on myFlifx </td>
         <td>"/movies"</td>
         <td>none</td>
-        <td>GET <br> Example: app.get("/movies", (req,res) =>{})</td>
+        <td>GET <br>app.get("/movies", (req,res) =>{
+              res.send('Successful GET request returns all the movies available on myFlix');});</td>
         <td>
-          A JSON object holding data about all the movies <br />
-          Example: {Title: "", Description: ""}
-          Director: { Name: "", Bio: "" }, Genre: { Name: "", Description:""} }
+            A JSON object holding data about all the movies <br />
+            Example: {Title: "", Description: ""} <br />
+            Director: { Name: "", Bio: "" }, Genre: { Name: "", Description:""} }
         </td>
+        <td>None</td>
       </tr>
 
       <tr>
-        <td>Returns data about a single movie search by title to user</td>
+        <td>Search a movie</td>
         <td>"/movies/:title"</td>
         <td>:title</td>
-        <td>GET <br> Example: app.get("/movies/:title", (req,res) =>{})</td>
-        <td>
-          A JSON object holding data about a single movie <br />
-          Example: {Title: "", Description: ""}
-        </td>
-      </tr>
+        <td>GET <br>app.get("/movies/:title", (req,res)=> {
+          res.send('Successful GET request returns searched movie');});</td>
+          <td>
+            A JSON object holding data about a single movie <br />
+            Example: {Title: "", Description: ""}
+          </td>
+        <td>None</td>
+    </tr>
 
       <tr>
-        <td>Returns data about a genre of movie called by name</td>
-        <td>"'/movies/genre/: genreName"</td>
+        <td>Search a genre of movie </td>
+        <td>"'/movies/genre/:genreName"</td>
         <td>:genreName</td>
-        <td>GET<br> Example: app.get("'/movies/genre/: genreName", (req,res) =>{})</td>
-        <td>
+        <td>GET<br>app.get("'/movies/genre/:genreName", (req,res) => {
+          res.send('Successful GET request returning list of movies called by searched genre');});</td>
+          <td>
           A JSON object holding data about a genre <br />
           Example: Genre: { Name: ""}
-        </td>
+          </td> 
+          <td>None </td>
       </tr>
       
       <tr>
-        <td>Returns data about a director by name</td>
-        <td>"/movies/directors/:name"</td>
+        <td>Search a director by name</td>
+        <td>"/movies/director/:directorName"</td>
         <td>:name</td>
-        <td>GET <br> Example: app.get("/movies/directors/:name", (req,res) =>{})</td>
-        <td>
-          A JSON object holding data about a director <br />
-          Example: Director: { Name: "", Bio: "" },
-        </td>
-      </tr>
+        <td>GET <br>app.get("/movies/directors/:name", (req,res) => {
+          res.send('Successful GET request returning data about a specific director with a Bio');});</td>
+            <td>A JSON object holding data about a director <br />
+              Example: Director: { Name: "", Bio: "" }</td> 
+          <td>None </td>
+        </tr>
       
       <tr>
-        <td>Creates new users Account</td>
-        <td>"/users"</td>
-        <td>none</td>
-        <td>POST <br>Example: app.post("/users", (req,res) =>{})</td>
-        <td>
-          A JSON object holding data about new user that was added <br />
-          Example: {
-            id: Integer,
-            name: String,
-            password: String,
-            email: String,
-            birthday: Date
-          },
-        </td>
-
-        <td>
-          A JSON object is requested  <br />
-          Example: {
-            id: number
-            name: String,
-            Password: String,
-            Email: String,
-            Birthday: Date
-            favoriteMovie : [{}]
-          },
-        </td>
-      </tr>
+          <td>Creates new users Account</td>
+          <td>"/users"</td>
+          <td>none</td>
+          <td>POST <br>app.post("/users", (req,res) => {
+          req.post('Successful POST will create a new user Account');});</td>
+          <td>None</td>
+          <td>
+            A JSON object is requested  <br />
+            Example: {
+              name: String,
+              Password: String,
+              Email: String,
+              Birthday: Date
+            }
+          </td>
+        </tr>
     
 
       <tr>
-        <td>Allows users to update their user info</td>
-        <td>"/users/:id"</td>
-        <td>:id</td>
-        <td>PUT <br> Example: app.put("/users/:id", (req,res) =>{})</td>
-      </tr>
+          <td>Update user's info</td>
+          <td>"/users/:id"</td>
+          <td>:id</td>
+          <td>PUT <br>app.put("/users/:id", (req,res) =>{
+          req.put('Successful PUT will allow user to update their info');});</td>
+          <td> A JSON object is provided after changes  <br />
+            Example: {
+              name: String,
+              Password: String,
+              Email: String,
+              Birthday: Date
+            }</td>
+          <td>
+            A JSON object is requested holding data about User <br />
+            Example: {
+              name: String,
+              Password: String,
+              Email: String,
+              Birthday: Date
+            }
+          </td>
+        </tr>
 
       <tr>
-        <td>Allows users to add a movie to their list of favorites</td>
-        <td>"/users/:id/:movieTitle"</td>
-        <td>:id,:movieTitle</td>
-        <td>POST <br> Example: app.post("/users/:id/:movieTitle", (req,res) =>{})</td>
-      </tr>
+          <td>Add a movie to User's list of favorites</td>
+          <td>"/users/:id/:movieTitle"</td>
+          <td>:id,:movieTitle</td>
+          <td>POST <br>app.post("/users/:id/:movieTitle", (req,res)  =>{
+          req.put('Successful POST will add movie to user's list');});</td>
+          <td>A text message indicating that the movie has been added</td>
+          <td>None</td>
+    
+        </tr>
 
       <tr>
-        <td>Allows users to remove a movie from their list of favorites</td>
-        <td>"/users/:id/:movieTitle"</td>
-        <td>:id,:movieTitle</td>
-        <td>DELETE <br> Example: app.delete("/users/:id/:movieTitle", (req,res) =>{})</td>
-      </tr>
+          <td>Remove a movie from their list of favorites</td>
+          <td>"/users/:id/:movieTitle"</td>
+          <td>:id,:movieTitle</td>
+          <td>DELETE <br>app.delete("/users/:id/:movieTitle", (req,res)  =>{
+          res.delete('Successful DELETE will DELETE a movie from user's list');});</td>
+          <td>A text message indicating that the movie has been deleted</td></td> 
+          <td>None</td>
+     
+        </tr>
 
       <tr>
-        <td>Allows users to delete Account</td>
-        <td>"/users/:id"</td>
-        <td>:id</td>
-        <td>DELETE <br> Example: app.delete("/users/:id", (req,res) =>{})</td>
-        <td>A text message indicating that the user has been deleted</td>
+            <td>Delete user's Account</td>
+            <td>"/users/:id"</td>
+            <td>:id</td>
+            <td>DELETE <br> app.delete("/users/:id",(req,res) =>{
+              res.delete('Successful DELETE will DELETE a user's Account');});</td>
+              <td>A text message indicating that the user has been deleted</td>
+            <td>None</td>
+ 
       </tr>
       
     </table>
 
 
 </main>
+
+
 
 </body>
 
