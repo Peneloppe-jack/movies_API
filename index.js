@@ -125,22 +125,22 @@ app.post('/users', (req, res) =>{
 
 // UPDATE user account
 app.put ('/users/:id', (req, res) =>{
-  req.put('Successful PUT updates User info');})
+  req.put('Successful PUT request updates User info');})
 
 // CREATE add movie to favorites movies 
 app.post ('/users/:id/:movieTitle', (req, res) =>{
-  req.post('Successful POST add movie to list of favorite movies ');})
+  req.post('Successful POST request add movie to list of favorite movies ');})
 
 
 // DELETE 4. remove a movie from list 
 app.delete('/users/:id/:movieTitle', (req, res) =>{
-  res.delete('Successful DELETE Removes movie to list of favorites');})
+  res.delete('Successful DELETE request  Removes movie to list of favorites');})
 
 
 
 // DELETE 4. delete user account
 app.delete ('/users/:id', (req, res) =>{
-  res.delete('Successful DELETE will DELETE Account');})
+  res.delete('Successful DELETE request will DELETE Account');})
 
 
 app.use(express.static('public')); 
