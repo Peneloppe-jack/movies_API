@@ -17,11 +17,16 @@ const Users = Models.User;
 //connecting mongoose to database to perform CRUD method
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));  
+//mongoose.connect (process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('common'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+let auth = require('./auth')(app); 
+const passport = require('passport');
+require('./passport');
+
 
 
 // GET requests
@@ -40,7 +45,10 @@ app.get('/documentation', (req, res) => {
 
 //READ : to return a list of all movies / 'Successful GET request returns full list of movies'
 
-app.get('/movies', (req, res) =>{
+app.get('/movies', passport.authenticate('jwt', { session: false }),
+//applyingd JWT authentication to endpoint
+//second parameter between the URL and callback function
+(req, res) =>{
   Movies.find()
   .then((movies) => {
       res.status(201).json(movies);
@@ -52,7 +60,7 @@ app.get('/movies', (req, res) =>{
 });
 
 //READ : to return data about a single momvie called by title  / 'Successful GET request returns searched movie'
-app.get('/movies/:Title', (req, res) =>{
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) =>{
   Movies.findOne({ Title: req.params.Title })
   .then((movie) => {
     res.json(movie);
@@ -64,7 +72,7 @@ app.get('/movies/:Title', (req, res) =>{
 });
 
 // Get all users cf Tutorial end
-app.get('/users', function (req, res) {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =>{
   Users.find()
     .then((users) => {
       res.status(201).json(users);
@@ -76,7 +84,7 @@ app.get('/users', function (req, res) {
 });
 
 //READ : to return data about a genre of a movie / 'Successful GET request returns genre of movie'
-app.get('/genre/:Name', (req, res) => {
+app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ 'Genre.Name': req.params.Name })
     .then((movie) => {
          res.json(movie.Genre.Description);
@@ -88,7 +96,7 @@ app.get('/genre/:Name', (req, res) => {
 });
 
 //READ : to return data with director's name / 'Successful GET request Bio of search director'
-app.get ('/director/:Name', (req, res) =>{
+app.get ('/director/:Name', passport.authenticate('jwt', { session: false }), (req, res) =>{
   Movies.findOne({ 'Director.Name': req.params.Name })
   .then((movie) => {
       res.json(movie.Director.Bio);
@@ -114,7 +122,6 @@ app.post('/users', (req, res) =>{
           Password: req.body.Password,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
-
         })
           .then((user) => {
           res.status(201).json(user);
@@ -132,7 +139,7 @@ app.post('/users', (req, res) =>{
 });
 
 // UPDATE user account /'Successful PUT request updates User info
-app.put ('/users/:Username', (req, res) =>{
+app.put ('/users/:Username', passport.authenticate('jwt', { session: false }),  (req, res) =>{
   Users.findOneAndUpdate({ User: req.params.Username }, { 
     $set:
       {
@@ -153,7 +160,7 @@ app.put ('/users/:Username', (req, res) =>{
   });
 
  // CREATE add movie to favorites movies /Successful POST request add movie to list of favorite movies
- app.post('/users/:Username/movies/:MovieID', (req, res) => {
+ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, 
     {
      $push: { 
@@ -171,7 +178,7 @@ app.put ('/users/:Username', (req, res) =>{
 });
 
 // DELETE 4. remove a movie from list /'Successful DELETE request  Removes movie to list of favorites
-app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, 
       { $pull: { FavoriteMovies: req.params.MovieID }
   },
@@ -189,7 +196,7 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
 
 
 // DELETE 4. delete user account /'Successful DELETE request will DELETE Account'
-app.delete('/users/:Username', (req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
