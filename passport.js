@@ -26,26 +26,31 @@ passport.use(new LocalStrategy({
 
       if (!user) {
         console.log('incorrect username');
-        return callback(null, false, {message: 'Incorrect username or password.'});
+        return callback(null, false, {message: 'Incorrect username.'});
       }
-//If error OR username can’t be found in the DB => error message passed to callback:
+  
+      if (!user.validatePassword(password)) {
+        console.log('incorrect password');
+        return callback(null, false, {message: 'Incorrect password.'});
+      }
+  
       console.log('finished');
       return callback(null, user);
     });
 }));
 
 passport.use(new JWTStrategy({
-//allows you to authenticate users based on the JWT submitted with request
-//WT is extracted from the header of the HTTP request.
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'your_jwt_secret'
-}, 
-  (jwtPayload, callback) => {
-    return Users.findById(jwtPayload._id)
-      .then((user) => {
-        return callback(null, user);
-      })
-      .catch((error) => {
-        return callback(error)
-      });
+}, (jwtPayload, callback) => {
+  return Users.findById(jwtPayload._id)
+    .then((user) => {
+      return callback(null, user);
+    })
+    .catch((error) => {
+      return callback(error)
+    });
 }));
+
+//allows you to authenticate users based on the JWT submitted with request
+//WT is extracted from the header of the HTTP request.

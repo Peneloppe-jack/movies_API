@@ -2,15 +2,14 @@
 //With username and password (basic HTTP authentication)
 //And generate a JWT to authenticate future requests
 
-const jwtSecret = 'your_jwt_secret'; 
-//same key used in the JWTStrategy
+const jwtSecret = 'your_jwt_secret'; //same key used in the JWTStrategy
 
 const jwt = require('jsonwebtoken'),
   passport = require('passport');
 
 require('./passport'); 
 
-//local passport.js that checks the username and password in DB
+//local checks the username and password in DB
 //if they do the function below creates JWT
 
 let generateJWTToken = (user) => {
@@ -37,7 +36,7 @@ module.exports = (router) => {
           res.send(error);
         }
         let token = generateJWTToken(user.toJSON());
-        return res.json({ user: user, token: token });
+        return res.json({ user, token });
       });
     })(req, res);
   });
