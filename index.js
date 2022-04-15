@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let auth = require('./auth')(app); 
 const passport = require('passport');
 require('./passport');
-
+ 
 // Welcome page
 app.get('/', (req, res) => {
   res.send('Welcome to my FlixApp!');
