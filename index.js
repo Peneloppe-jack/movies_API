@@ -4,17 +4,9 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 uuid= require ('uuid');
+app.use(morgan('common'));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
 
-const cors = require('cors');//new implementting cors allowing access to all domains by default
-app.use(cors()); //new
-
-let auth = require('./auth')(app); 
-const passport = require('passport');
-require('./passport');
- 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
@@ -23,14 +15,42 @@ const Users = Models.User;
 //const Genres = Models.Genre; 
 //const Directors = Models.Director;
 
+//connecting mongoose to database to perform CRUD method
+//mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+//useNewUrlParser: true, 
+//useUnifiedTopology: true });
+
+
+mongoose.connect(process.env.CONNECTION_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true });
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+const cors = require('cors');
+//new implementting cors allowing access to all domains by default
+app.use(cors()); //new
+
+//restrict origins:
+let allowedOrigins = ['http://localhost:8080'];
+app.use(cors({
+    origin: (origin, callback) => {
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+            let message = 'The CORS policy for this application doesn\'t allow acess from origin ' + origin;
+            return callback(new Error(message ), false);
+        }
+        return callback(null, true);
+    }
+}));
+
+let auth = require('./auth')(app); 
+const passport = require('passport');
+require('./passport');
+ 
 const { check, validationResult } = require('express-validator');
 
-//connecting mongoose to database to perform CRUD method
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true });
-
-app.use(morgan('common'));
 
 // Welcome page
 app.get('/', (req, res) => {
@@ -119,8 +139,6 @@ app.put ('/users/:Username', passport.authenticate('jwt', { session: false }),
     });
 });
 
-
-//https://git-scm.com/book/en/v2/Getting-Started-Getting-Help
 // GET List users 
 app.get('/users', passport.authenticate('jwt', { session: false }),
  (req, res) =>{
@@ -257,9 +275,9 @@ app.use(express.static('public'));
   res.status(500).send('Something broke!');
 });
 
-
-app.listen(8080, () =>{
-  console.log('Your app is listening on port 8080.');
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
 
 
