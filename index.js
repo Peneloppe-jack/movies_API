@@ -22,28 +22,17 @@ const Users = Models.User;
 
 
 mongoose.connect(process.env.CONNECTION_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true });
+  { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-const cors = require('cors');
-//new implementting cors allowing access to all domains by default
-app.use(cors()); //new
 
-//restrict origins:
-let allowedOrigins = ['http://localhost:8080'];
-app.use(cors({
-    origin: (origin, callback) => {
-        if(!origin) return callback(null, true);
-        if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
-            let message = 'The CORS policy for this application doesn\'t allow acess from origin ' + origin;
-            return callback(new Error(message ), false);
-        }
-        return callback(null, true);
-    }
-}));
+//new implementting cors allowing access to all domains by default
+const cors = require('cors');
+app.use(cors()); 
+
 
 let auth = require('./auth')(app); 
 const passport = require('passport');
@@ -85,7 +74,7 @@ app.post('/users',
       if(user){ //new  if user is found-send resp
         return res.status(400).send(req.body.Username + ' already exists');
        
-      } else { //new 
+      } else { 
         Users.create({
           Username: req.body.Username,
           Password: hashedPassword, //updated password
@@ -140,7 +129,8 @@ app.put ('/users/:Username', passport.authenticate('jwt', { session: false }),
 });
 
 // GET List users 
-app.get('/users', passport.authenticate('jwt', { session: false }),
+app.get('/users', passport.authenticate
+('jwt', { session: false }),
  (req, res) =>{
   Users.find()
     .then((users) => {
@@ -154,7 +144,8 @@ app.get('/users', passport.authenticate('jwt', { session: false }),
 
 
 //GET: list of all movies 
-app.get('/movies', passport.authenticate('jwt', { session: false }),
+app.get('/movies', passport.authenticate
+('jwt', { session: false }),
 (req, res) =>{
 Movies.find()
   .then((movies) => {
@@ -167,7 +158,8 @@ Movies.find()
 });
 
 //GET : a movie called by title  
-app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) =>{
+app.get('/movies/:Title', passport.authenticate
+('jwt', { session: false }), (req, res) =>{
   Movies.findOne({ Title: req.params.Title })
   .then((movie) => {
     if(movie){
@@ -183,7 +175,8 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 
 
 //GET : a genre of movie 
-app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/genre/:Name', passport.authenticate
+('jwt', { session: false }), (req, res) => {
   Movies.findOne({ 'Genre.Name': req.params.Name })
     .then((movie) => {
       if(movie){ 
@@ -199,7 +192,8 @@ app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, 
 });
 
 //GET: a director's bio
-app.get ('/director/:Name', passport.authenticate('jwt', { session: false }), (req, res) =>{
+app.get ('/director/:Name', passport.authenticate
+('jwt', { session: false }), (req, res) =>{
   Movies.findOne({ 'Director.Name': req.params.Name })
   .then((movie) => {
     if(movie){
@@ -234,7 +228,8 @@ app.get ('/director/:Name', passport.authenticate('jwt', { session: false }), (r
 });
 
 // DELETE 4. remove a movie from list 
-app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate
+('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, 
       { $pull: { FavoriteMovies: req.params.MovieID }},
   { new: true },
@@ -251,7 +246,8 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 
 
 // DELETE 4. delete user account /'Successful DELETE request will DELETE Account'
-app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.delete('/users/:Username', passport.authenticate
+('jwt', { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
@@ -279,7 +275,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
-
-
-
-
