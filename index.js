@@ -15,14 +15,16 @@ const Users = Models.User;
 //const Genres = Models.Genre; 
 //const Directors = Models.Director;
 
-//connecting mongoose to database to perform CRUD method
+
+//connecting DB to MongoDB and Heroku
+mongoose.connect( process.env.CONNECTION_URI,
+   { useNewUrlParser: true, useUnifiedTopology: true });
+
+
+//connecting mongoose to Locol database to perform CRUD method
 //mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
 //useNewUrlParser: true, 
 //useUnifiedTopology: true });
-
-
-mongoose.connect(process.env.CONNECTION_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 app.use(bodyParser.json());
@@ -271,7 +273,7 @@ app.use(express.static('public'));
   res.status(500).send('Something broke!');
 });
 
-const port = process.env.PORT || 8080;
+let port = process.env.PORT || 8080; 
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });

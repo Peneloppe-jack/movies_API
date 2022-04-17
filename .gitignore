@@ -125,3 +125,16 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#Environment variables 
+.env
+USER_ID = peneloppeJack
+USER_KEY = mongodbmyflixdb
+PORT = 8080
+CONNECTION_URI = mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority
+
+#DB CONFIG
+LOCAL = mongodb://localhost:27017/myFlixDB
+HOST  = mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority
+DB = myFlixDB
+Dialect = mongodb
