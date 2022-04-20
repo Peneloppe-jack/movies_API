@@ -128,13 +128,19 @@ dist
 
 #Environment variables 
 .env
-USER_ID = peneloppeJack
-USER_KEY = mongodbmyflixdb
 PORT = 8080
-process.env.CONNECTION_URI = mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority
+SATUS = production
+DEV_PORT = 5000
+PRO_PORT = 8000
 
 #DB CONFIG
-LOCAL = mongodb://localhost:27017/myFlixDB
 HOST  = mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority
+USER = peneloppeJack
+Password = mongodbmyflixdb
 DB = myFlixDB
 Dialect = mongodb
+
+
+
+CONNECTION_URI = mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority
+   
