@@ -6,6 +6,21 @@ const bodyParser = require('body-parser');
 uuid= require ('uuid');
 app.use(morgan('common'));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+const cors = require('cors');
+app.use(cors()); 
+
+
+const { check, validationResult } = require('express-validator');
+
+let auth = require('./auth')(app); 
+const passport = require('passport');
+require('./passport');
+require ('dontenv').config ();
+ 
+
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -15,32 +30,15 @@ const Users = Models.User;
 //const Genres = Models.Genre; 
 //const Directors = Models.Director;
 
-
-//connecting DB to MongoDB and Heroku
-//mongoose.connect( process.env.CONNECTION_URI,
-  // { useNewUrlParser: true, useUnifiedTopology: true });
-
+mongoose.connect(process.env.CONNECTION_URI || 'mongodb://localhost:27017/myFlixDB', //just added this line 
+  { useNewUrlParser: true, useUnifiedTopology: true });
 
 //connecting mongoose to Locol database to perform CRUD method
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
-useNewUrlParser: true, 
-useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/myFlixDB', { 
+//useNewUrlParser: true, 
+//useUnifiedTopology: true });
 
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
-
-
-//new implementting cors allowing access to all domains by default
-const cors = require('cors');
-app.use(cors()); 
-
-
-let auth = require('./auth')(app); 
-const passport = require('passport');
-require('./passport');
- 
-const { check, validationResult } = require('express-validator');
+app.use(morgan("common"));
 
 
 // Welcome page

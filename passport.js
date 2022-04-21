@@ -54,4 +54,4 @@ passport.use(new JWTStrategy({
 }));
 
 //allows you to authenticate users based on the JWT submitted with request
-//jWT is extracted from the header of the HTTP request.
+//WT is extracted from the header of the HTTP request.

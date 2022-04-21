@@ -14,8 +14,9 @@ let movieSchema = mongoose.Schema({
     },
     ImagePath: String,
     Featured: Boolean
+
   });
-  
+
   let userSchema = mongoose.Schema({
     Username: {type: String, required: true},
     Password: {type: String, required: true},
@@ -37,8 +38,8 @@ let movieSchema = mongoose.Schema({
   // Name: {type: String, required: true},
     //Description: {type: String, required: true}
   //});
-
- //let directorSchema = mongoose.Schema ({
+      
+ //let directorSchema = mongoose.Schema ({ 
    //  Name: {type: String, required: true},
     //Bio: {type: String, required: true}
 //});
@@ -47,8 +48,8 @@ let movieSchema = mongoose.Schema({
   let User = mongoose.model('User', userSchema);
    //let Genre = mongoose.model('Genre', genreSchema);
    //let Director = mongoose.model('Director', directorSchema);
+   
 
-  
   module.exports.Movie = Movie;
   module.exports.User = User;
   //module.exports.Genre = Genre;
