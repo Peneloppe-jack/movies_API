@@ -126,21 +126,19 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-#Environment variables 
+
+
+#dotenv environment variables file
 .env
-PORT = 8080
+
+#Environment variables 
 SATUS = production
-DEV_PORT = 5000
-PORT_PRO = 8000
+PORT = 8080
 
 #DB CONFIG
 CONNECTION_URI_USER_KEY = peneloppeJack
 CONNECTION_URI_SECRET = mongodbmyflixdb
-
 DB = myFlixDB
-DATABASE_URL = 'mongodb://localhost:27017/myFlixDB'
-newDATABASE_URL = CONNECTION_URI = 'mongodb+srv://peneloppeJack:mongodbmyflixdb@mongodbcluster.exyan.mongodb.net/myFlixDB?retryWrites=true&w=majority'
-
 Dialect = mongodb
 
 
