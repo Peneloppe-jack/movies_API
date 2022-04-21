@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const port = process.env.PORT || 8080;
 
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -18,8 +19,7 @@ const { check, validationResult } = require('express-validator');
 let auth = require('./auth')(app); 
 const passport = require('passport');
 require('./passport');
-require ('dontenv').config ();
- 
+
 
 
 const mongoose = require('mongoose');
@@ -29,6 +29,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 //const Genres = Models.Genre; 
 //const Directors = Models.Director;
+
 
 mongoose.connect(process.env.CONNECTION_URI || 'mongodb://localhost:27017/myFlixDB', //just added this line 
   { useNewUrlParser: true, useUnifiedTopology: true });
@@ -78,8 +79,9 @@ app.post('/users',
       } else { 
         Users.create({
           Username: req.body.Username,
-          Password: hashedPassword, //updated password
-          Email: req.body.Email
+          Password: hashedPassword,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday
         
         })
         .then((user) => { 
@@ -100,7 +102,9 @@ app.post('/users',
 app.put('/users/:Username',// passport.authenticate('jwt', { session: false }), 
  
     [ check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),], 
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(), //meaning is required
+    check('Email', 'Email does not appear to be valid').isEmail() ],
 (req, res) => {
       let errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -109,8 +113,9 @@ app.put('/users/:Username',// passport.authenticate('jwt', { session: false }),
   Users.findOneAndUpdate ({ Username: req.params.Username }, 
                { $set:{
                 Username: req.body.Username,
-                Password: hashedPassword,
-                Email: req.body.Email
+                Password: Password,
+                Email: req.body.Email,
+                Birthday: req.body.Birthday
               }
         },
         { new:true }) //returns the updated document
@@ -124,28 +129,31 @@ app.put('/users/:Username',// passport.authenticate('jwt', { session: false }),
 });
 
 // GET List users For me while I work 
-//app.get('/users', (req, res) =>{
-//  Users.find()
-//    .then((users) => {
-//      res.status(201).json(users);
-//    })
-//    .catch((err) => {
-//      console.error(err);
-//      res.status(500).send('Error: ' + err);
-//    });
-//   });
+app.get('/users', (req, res) =>{
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+     res.status(500).send('Error: ' + err);
+  });
+});
 
-// Get a user by username
+// Get a user by username me when I work
 app.get("/users/:Username", passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
-      res.json(user);
+     res.json(user);
     })
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error: " + err);
     });
 });
+
+
+
 
 //GET: list of all movies 
 app.get('/movies', passport.authenticate ('jwt', { session: false }),
@@ -273,7 +281,7 @@ app.use(express.static('public'));
   res.status(500).send('Something broke!');
 });
 
-let port = process.env.PORT || 8080; 
+
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
