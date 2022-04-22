@@ -1,0 +1,13 @@
+CONNECTION_URI_USER_KEY = peneloppeJack
+CONNECTION_URI_SECRET = mongodbmyflixdb
+
+#Environment variables 
+SATUS = production
+PORT = 8080
+
+#DB CONFIG
+CONNECTION_URI_USER_KEY = peneloppeJack
+CONNECTION_URI_SECRET = mongodbmyflixdb
+DB = myFlixDB
+Dialect = mongodb
+
