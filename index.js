@@ -19,7 +19,7 @@ const { check, validationResult } = require('express-validator');
 let auth = require('./auth')(app); 
 const passport = require('passport');
 require('./passport');
-
+//app.use('dontenv').config();
 
 
 const mongoose = require('mongoose');
@@ -80,15 +80,14 @@ app.post('/users',
         Users.create({
           Username: req.body.Username,
           Password: hashedPassword,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday
+          Email: req.body.Email
         
         })
         .then((user) => { 
           res.status(201).json(user); })
         .catch((err) => { 
           console.error(err);
-          res.status(500).send('Error: ' + error); })
+          res.status(500).send('Error: ' + errors); })
         }
       })
     .catch((err) => {
@@ -99,7 +98,7 @@ app.post('/users',
 
 
 // UPDATE user account /'Successful PUT request updates User info
-app.put('/users/:Username',// passport.authenticate('jwt', { session: false }), 
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), 
  
     [ check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
@@ -110,17 +109,18 @@ app.put('/users/:Username',// passport.authenticate('jwt', { session: false }),
         if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
+  
+    let hashedPassword = Users.hashPassword(req.body.Password);  
   Users.findOneAndUpdate ({ Username: req.params.Username }, 
                { $set:{
                 Username: req.body.Username,
-                Password: Password,
-                Email: req.body.Email,
-                Birthday: req.body.Birthday
+                Password: hashedPassword,
+                Email: req.body.Email
               }
         },
         { new:true }) //returns the updated document
         .then((updatedUser) => {
-          res.json(updatedUser);
+          res.status(200).json(updatedUser);
         })
         .catch((err) => {
           console.error(err);
@@ -191,7 +191,7 @@ app.get('/genre/:Name', passport.authenticate ('jwt', { session: false }),
     Movies.findOne({ 'Genre.Name': req.params.Name })
     .then((movie) => {
       if(movie){ 
-         res.json(movie.Genre.Description);
+         res.status(200).json(movie.Genre.Description);
     }else{
       res.status(400).send('Genre not found.');
     };
@@ -204,7 +204,7 @@ app.get('/genre/:Name', passport.authenticate ('jwt', { session: false }),
 
 //GET: a director's bio
 app.get ('/director/:Name', passport.authenticate ('jwt', { session: false }), 
-(req, res) =>{
+(req, res) => {
   Movies.findOne({ 'Director.Name': req.params.Name })
   .then((movie) => {
     if(movie){
@@ -232,7 +232,7 @@ app.get ('/director/:Name', passport.authenticate ('jwt', { session: false }),
         console.error(err);
         res.status(500).send('Error: ' + err);
       } else {
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
       }
     });
   });
@@ -248,7 +248,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate ('jwt', { s
         console.error(err);
         res.status(500).send('Error: ' + err);
       } else {
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
       }
   });
 });
@@ -256,7 +256,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate ('jwt', { s
 
 
 // DELETE 4. delete user account /'Successful DELETE request will DELETE Account'
-app.delete('/users/:Username', passport.authenticate ('jwt', { session: false }), 
+app.delete('/users/:Username',// passport.authenticate ('jwt', { session: false }), 
 (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
