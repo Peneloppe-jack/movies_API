@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 app.use(cors()); 
 
+app.use(express.static('public')); 
 
 const { check, validationResult } = require('express-validator');
 
@@ -245,9 +246,6 @@ app.delete('/users/:Username',// passport.authenticate ('jwt', { session: false 
       res.status(500).send('Error: ' + err);
     });
 });
-
-
-app.use(express.static('public')); 
 
 
  app.use((err, req, res, next) => {
