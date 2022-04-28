@@ -10,17 +10,17 @@ app.use(morgan('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-const cors = require('cors');
-app.use(cors()); 
-
-app.use(express.static('public')); 
-
-const { check, validationResult } = require('express-validator');
+//const cors = require('cors');
+app.use(cors());
 
 let auth = require('./auth')(app); 
 const passport = require('passport');
 require('./passport');
 //app.use('dontenv').config();
+
+app.use(express.static('public')); 
+
+const { check, validationResult } = require('express-validator');
 
 
 const mongoose = require('mongoose');
@@ -58,7 +58,7 @@ app.get('/documentation', (req, res) => {
 app.post('/users',
       [ //here commes the validation logic
         check('Username', 'Username is required').isLength({min: 5}),
-        check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+       check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
         check('Password', 'Password is required').not().isEmpty(), //meaning is required
         check('Email', 'Email does not appear to be valid').isEmail() ], 
 
@@ -102,7 +102,7 @@ app.post('/users',
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), 
  
     [ check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(), //meaning is required
     check('Email', 'Email does not appear to be valid').isEmail() ],
 (req, res) => {
@@ -231,7 +231,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate ('jwt', { s
 
 
 // DELETE 4. delete user account /'Successful DELETE request will DELETE Account'
-app.delete('/users/:Username',// passport.authenticate ('jwt', { session: false }), 
+app.delete('/users/:Username', passport.authenticate ('jwt', { session: false }), 
 (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
