@@ -58,7 +58,6 @@ app.get('/documentation', (req, res) => {
 app.post('/users',
       [ //here commes the validation logic
         check('Username', 'Username is required').isLength({min: 5}),
-       check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
         check('Password', 'Password is required').not().isEmpty(), //meaning is required
         check('Email', 'Email does not appear to be valid').isEmail() ], 
 
@@ -102,7 +101,6 @@ app.post('/users',
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), 
  
     [ check('Username', 'Username is required').isLength({min: 5}),
-     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(), //meaning is required
     check('Email', 'Email does not appear to be valid').isEmail() ],
 (req, res) => {
@@ -131,7 +129,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }),
 
 
 //GET: list of all movies 
-app.get('/movies', //passport.authenticate ('jwt', { session: false }),
+app.get('/movies', passport.authenticate ('jwt', { session: false }),
 (req, res) => {
 Movies.find()
   .then((movies) => {
