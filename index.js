@@ -238,6 +238,17 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate ('jwt', { s
   });
 });
 
+// Get a user by username me when I work
+app.get("/users/:Username", passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+     res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
 
 
 // DELETE 4. delete user account /'Successful DELETE request will DELETE Account'
